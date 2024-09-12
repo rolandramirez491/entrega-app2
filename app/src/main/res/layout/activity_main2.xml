@@ -13,7 +13,7 @@
         android:text="Bienvenido"
         android:textSize="20sp" />
 
-    <!-- Botón para regresar a MainActivity -->
+
     <Button
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"

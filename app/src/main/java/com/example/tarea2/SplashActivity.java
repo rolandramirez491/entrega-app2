@@ -12,15 +12,15 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        // Usar un Handler para iniciar MainActivity después de 3 segundos
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                // Intent para iniciar MainActivity
+
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(intent);
-                finish(); // Finalizar SplashActivity para que no quede en la pila de actividades
+                finish();
             }
-        }, 5000); // 3000 milisegundos = 3 segundos
+        }, 5000); //
     }
 }

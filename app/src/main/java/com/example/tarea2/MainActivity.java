@@ -2,10 +2,13 @@ package com.example.tarea2;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.View;
 import java.text.SimpleDateFormat;
@@ -16,7 +19,9 @@ public class MainActivity extends AppCompatActivity {
     Button btn1, btn4;
     EditText edt1;
     TextView tv1;
+    ImageView imageView; // mostrar la capturada
     String TAG = "Test";
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,13 +29,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d(TAG,"Estoy en onCreate");
 
-        // Referencias a los elementos del layout
-        btn1 = findViewById(R.id.btn1); // Botón hora del sistema
-        btn4 = findViewById(R.id.btn4); // Botón pasar página
+        btn1 = findViewById(R.id.btn1);
+        btn4 = findViewById(R.id.btn4);
         edt1 = findViewById(R.id.edt1);
         tv1 = findViewById(R.id.tv1);
+        imageView = findViewById(R.id.imageView); // ImageView para la imagen
 
-        // Botón hora del sistema
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Limpiar texto en el EditText cuando tenga el foco
         edt1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -53,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Botón pasar página
         btn4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,13 +72,34 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         Log.d(TAG,"Estoy en onStart");
 
+        // Llamar la cámara para tomar una foto en onStart
+        dispatchTakePictureIntent();
+    }
+
+    // lanzar la cámara
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    // Método para imagen capturada
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageView.setImageBitmap(imageBitmap); // mostrar en el ImageView
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG,"Estoy en onResume");
-        // Puedes poner un mensaje en pantalla o realizar otras acciones aquí
+        String nombre2 = edt1.getText().toString();
+        Log.d(TAG,"Hola "+nombre2+" estas en el onResume");
     }
 
     @Override
